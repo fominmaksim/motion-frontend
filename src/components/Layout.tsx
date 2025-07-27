@@ -47,7 +47,7 @@ const AppMain = styled.main`
   background: #f7fafc;
 `;
 
-export const AppLayout = () => {
+export const Layout = () => {
   return (
     <AppLayoutContainer>
       <AppHeader>

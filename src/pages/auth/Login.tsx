@@ -1,21 +1,23 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { typographyStyles, TypographyVariant } from '../../components/Typography/typographyStyles';
+import { Typography } from '../../components/Typography/Typography';
 
 const LoginContainer = styled.div`
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #121212;
   padding: 20px;
 `;
 
 const LoginCard = styled.div`
-  background: white;
+  background: #1e1e1e;
   border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  padding: 40px;
+  border: 1px solid #393939;
+  padding: 30px 40px;
   width: 100%;
   max-width: 400px;
   animation: slideUp 0.6s ease-out;
@@ -38,25 +40,8 @@ const LoginCard = styled.div`
 `;
 
 const LoginHeader = styled.div`
-  text-align: center;
+  text-align: left;
   margin-bottom: 32px;
-
-  h1 {
-    color: #1a202c;
-    font-size: 28px;
-    font-weight: 700;
-    margin: 0 0 8px 0;
-
-    @media (max-width: 480px) {
-      font-size: 24px;
-    }
-  }
-
-  p {
-    color: #718096;
-    font-size: 16px;
-    margin: 0;
-  }
 `;
 
 const LoginForm = styled.form`
@@ -71,18 +56,19 @@ const FormGroup = styled.div`
   gap: 8px;
 
   label {
-    color: #4a5568;
+    color: #BBBBBB;
     font-size: 14px;
     font-weight: 600;
   }
 
   input {
     padding: 12px 16px;
-    border: 2px solid #e2e8f0;
+    border: 1px solid #393939;
     border-radius: 8px;
     font-size: 16px;
     transition: all 0.2s ease;
-    background: white;
+    background: inherit;
+    color: #BBBBBB;
 
     &:focus {
       outline: none;
@@ -143,18 +129,10 @@ const LoginFooter = styled.div`
   text-align: center;
 `;
 
-const DemoCredentials = styled.p`
-  background: #f7fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 16px;
-  font-size: 14px;
-  color: #4a5568;
-  line-height: 1.5;
-
-  strong {
-    color: #2d3748;
-  }
+const Title = styled.div`
+  ${typographyStyles[TypographyVariant.H3]}
+  color: #BBBBBB;
+  margin-bottom: 1rem;
 `;
 
 export const Login = () => {
@@ -171,8 +149,8 @@ export const Login = () => {
 
     // Mock authentication - simulate API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate network delay
+
       // Mock validation
       if (email === 'demo@example.com' && password === '123Max!') {
         // Mock successful login
@@ -180,7 +158,7 @@ export const Login = () => {
         localStorage.setItem('user', JSON.stringify({ email, name: 'Demo User' }));
         navigate('/board');
       } else {
-        setError('Invalid email or password. Try demo@example.com / password');
+        setError('Invalid email or password. Try demo@example.com / 123Max!');
       }
     } catch {
       setError('An error occurred. Please try again.');
@@ -193,8 +171,7 @@ export const Login = () => {
     <LoginContainer>
       <LoginCard>
         <LoginHeader>
-          <h1>Welcome Back</h1>
-          <p>Sign in to your account</p>
+          <Title>Login</Title>
         </LoginHeader>
 
         <LoginForm onSubmit={handleSubmit}>
@@ -226,21 +203,12 @@ export const Login = () => {
 
           {error && <ErrorMessage>{error}</ErrorMessage>}
 
-          <LoginButton 
-            type="submit" 
-            disabled={isLoading}
-          >
+          <LoginButton type="submit" disabled={isLoading}>
             {isLoading ? 'Signing in...' : 'Sign In'}
           </LoginButton>
         </LoginForm>
 
-        <LoginFooter>
-          <DemoCredentials>
-            <strong>Demo Credentials:</strong><br />
-            Email: demo@example.com<br />
-            Password: password
-          </DemoCredentials>
-        </LoginFooter>
+        <LoginFooter></LoginFooter>
       </LoginCard>
     </LoginContainer>
   );
