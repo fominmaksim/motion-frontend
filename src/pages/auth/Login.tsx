@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { typographyStyles, TypographyVariant } from '../../components/Typography/typographyStyles';
-import { Typography } from '../../components/Typography/Typography';
+import { useAuth } from '../../hooks/useAuth';
 
 const LoginContainer = styled.div`
   min-height: 100vh;
@@ -56,7 +56,7 @@ const FormGroup = styled.div`
   gap: 8px;
 
   label {
-    color: #BBBBBB;
+    color: #bbbbbb;
     font-size: 14px;
     font-weight: 600;
   }
@@ -68,7 +68,7 @@ const FormGroup = styled.div`
     font-size: 16px;
     transition: all 0.2s ease;
     background: inherit;
-    color: #BBBBBB;
+    color: #bbbbbb;
 
     &:focus {
       outline: none;
@@ -124,6 +124,61 @@ const LoginButton = styled.button`
   }
 `;
 
+const GoogleButton = styled.button`
+  background: #4285f4;
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 16px;
+
+  &:hover:not(:disabled) {
+    background: #3367d6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  img {
+    width: 20px;
+    height: 20px;
+  }
+`;
+
+const Divider = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 24px 0;
+  color: #718096;
+  font-size: 14px;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #393939;
+  }
+
+  span {
+    padding: 0 16px;
+  }
+`;
+
 const LoginFooter = styled.div`
   margin-top: 32px;
   text-align: center;
@@ -141,6 +196,7 @@ export const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { signInWithGoogle } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -162,6 +218,20 @@ export const Login = () => {
       }
     } catch {
       setError('An error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsLoading(true);
+      setError('');
+      await signInWithGoogle();
+      navigate('/board');
+    } catch (error) {
+      setError('Failed to sign in with Google. Please try again.');
+      console.error('Google sign-in error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -207,6 +277,18 @@ export const Login = () => {
             {isLoading ? 'Signing in...' : 'Sign In'}
           </LoginButton>
         </LoginForm>
+
+        <Divider>
+          <span>or</span>
+        </Divider>
+
+        <GoogleButton type="button" onClick={handleGoogleSignIn} disabled={isLoading}>
+          <img
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAxOCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE3LjY0IDkuMjA0NTVDMTcuNjQgOC41NjY0IDE3LjU4MjcgOC4xMzE4MiAxNy40NzI3IDcuNjY4MTlMMTQuOTI3MyA3LjY2ODE5TDE0LjkyNzMgMTAuNjQ1NUgxNy4zNkMxNy4yNCAxMS4xNjM2IDE2LjgxODIgMTIuNzYzNiAxNS43MjczIDEzLjk4MThDMTQuNjM2NCAxNS4xOTkxIDEyLjg5MDkgMTUuOTk5MSAxMC45MDkxIDE1Ljk5OTFDOC4xNjM2NCAxNS45OTkxIDUuODU0NTUgMTQuMzYzNiA1LjAwNTQ1IDEyLjA5MDlDNC4xNTYzNiA5LjgxODE4IDQuMTU2MzYgNy4wOTA5MSA1LjAwNTQ1IDQuODE4MThDNS44NTQ1NSAyLjU0NTQ1IDguMTYzNjQgMC45MDkwOTEgMTAuOTA5MSAwLjkwOTA5MUMxMi4yNzI3IDAuOTA5MDkxIDEzLjM0NTUgMS4zNjM2NCAxNC4xODE4IDEuOTgxODJMMTYuMDcyNyAwLjE4MTgxOEMxNC45MDkxIC0wLjYzNjM2NCAxMy4wOTA5IC0xLjA5MDkxIDEwLjkwOTEgLTEuMDkwOTFDNy4zMDAwMSAtMS4wOTA5MSA0LjE2MzY0IDAuNzI3MjczIDIuNzI3MjcgMy4wOTA5MUMxLjI5MDkxIDUuNDU0NTUgMS4yOTA5MSA4LjQ1NDU1IDIuNzI3MjcgMTAuODE4MkM0LjE2MzY0IDEzLjE4MTggNy4zMDAwMSAxNC45MDkgMTAuOTA5MSAxNC45MDlDMTMuMzYzNiAxNC45MDkgMTUuNDcyNyAxNC4wOTA5IDE2LjgxODEgMTIuNzI3M0MxNy42MzY0IDExLjgxODEgMTcuNjQgMTAuMDkwOSAxNy42NCA5LjIwNDU1WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+"
+            alt="Google"
+          />
+          Sign in with Google
+        </GoogleButton>
 
         <LoginFooter></LoginFooter>
       </LoginCard>

@@ -3,6 +3,7 @@ import { Protected } from './protected';
 import { Login } from '../pages/auth/Login';
 import { Layout } from '../components/Layout';
 import { Dashboard } from '../pages/app/Dashboard';
+import { Settings } from '../pages/app/Settings';
 
 export const router = createBrowserRouter([
   {
@@ -17,11 +18,24 @@ export const router = createBrowserRouter([
     element: <Protected />,
     children: [
       {
+        path: '/dashboard',
+        element: <Layout />,
+        children: [
+          { index: true, element: <Dashboard /> },
+        ],
+      },
+      {
         path: '/board',
         element: <Layout />,
         children: [
           { index: true, element: <Dashboard /> },
-          //   { path: 'board/:id', element: <Board /> },
+        ],
+      },
+      {
+        path: '/settings',
+        element: <Layout />,
+        children: [
+          { index: true, element: <Settings /> },
         ],
       },
     ],
