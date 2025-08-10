@@ -1,4 +1,10 @@
 import styled from 'styled-components';
+import {
+  Typography,
+  TypographyVariant,
+  TypographyColors,
+} from '../../components/Typography/Typography';
+import { useAuth } from '../../hooks/useAuth';
 
 const DashboardContainer = styled.div`
   max-width: 1200px;
@@ -29,64 +35,21 @@ const DashboardContent = styled.div`
   gap: 24px;
 `;
 
-const DashboardCard = styled.div`
-  background: white;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e2e8f0;
-
-  h3 {
-    color: #2d3748;
-    font-size: 20px;
-    font-weight: 600;
-    margin: 0 0 16px 0;
-  }
-
-  p {
-    color: #4a5568;
-    line-height: 1.6;
-    margin: 0 0 16px 0;
-  }
-
-  ul {
-    color: #4a5568;
-    line-height: 1.6;
-    margin: 0;
-    padding-left: 20px;
-
-    li {
-      margin-bottom: 8px;
-    }
-  }
-`;
-
 export const Dashboard = () => {
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const { currentUser } = useAuth();
 
   return (
     <DashboardContainer>
       <DashboardHeader>
-        <h2>Welcome, {user.name || 'User'}!</h2>
-        <p>You have successfully logged in to the Motion app.</p>
+        <Typography color={TypographyColors.GRAY_100} variant={TypographyVariant.H2}>
+          Welcome, {currentUser?.displayName || 'User Name'}!
+        </Typography>
+        <Typography color={TypographyColors.GRAY_400} variant={TypographyVariant.BODY1}>
+          You have successfully logged in to the Motion app.
+        </Typography>
       </DashboardHeader>
-      
-      <DashboardContent>
-        <DashboardCard>
-          <h3>Getting Started</h3>
-          <p>This is a mock dashboard. In a real application, you would see your actual data and functionality here.</p>
-        </DashboardCard>
-        
-        <DashboardCard>
-          <h3>Features</h3>
-          <ul>
-            <li>Authentication system</li>
-            <li>Protected routes</li>
-            <li>Responsive design</li>
-            <li>Modern UI/UX</li>
-          </ul>
-        </DashboardCard>
-      </DashboardContent>
+
+      <DashboardContent></DashboardContent>
     </DashboardContainer>
   );
-}; 
+};

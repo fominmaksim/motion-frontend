@@ -1,5 +1,55 @@
 import { css } from 'styled-components';
 
+// Color constants for consistent theming
+export const TypographyColors = {
+  // Primary colors
+  PRIMARY: '#3b82f6',
+  PRIMARY_DARK: '#1d4ed8',
+  PRIMARY_LIGHT: '#93c5fd',
+  
+  // Secondary colors
+  SECONDARY: '#6b7280',
+  SECONDARY_DARK: '#374151',
+  SECONDARY_LIGHT: '#d1d5db',
+  
+  // Success colors
+  SUCCESS: '#10b981',
+  SUCCESS_DARK: '#059669',
+  SUCCESS_LIGHT: '#6ee7b7',
+  
+  // Warning colors
+  WARNING: '#f59e0b',
+  WARNING_DARK: '#d97706',
+  WARNING_LIGHT: '#fcd34d',
+  
+  // Error colors
+  ERROR: '#ef4444',
+  ERROR_DARK: '#dc2626',
+  ERROR_LIGHT: '#fca5a5',
+  
+  // Neutral colors
+  WHITE: '#ffffff',
+  BLACK: '#000000',
+  GRAY_50: '#f9fafb',
+  GRAY_100: '#f3f4f6',
+  GRAY_200: '#e5e7eb',
+  GRAY_300: '#d1d5db',
+  GRAY_400: '#9ca3af',
+  GRAY_500: '#6b7280',
+  GRAY_600: '#4b5563',
+  GRAY_700: '#374151',
+  GRAY_800: '#1f2937',
+  GRAY_900: '#111827',
+  
+  // Text colors
+  TEXT_PRIMARY: '#1a202c',
+  TEXT_SECONDARY: '#4a5568',
+  TEXT_DISABLED: '#a0aec0',
+  TEXT_INVERSE: '#ffffff',
+} as const;
+
+export type TypographyColorType = (typeof TypographyColors)[keyof typeof TypographyColors];
+
 // Typography variants const
 export const TypographyVariant = {
   H1: 'h1',
